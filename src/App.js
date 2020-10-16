@@ -27,6 +27,18 @@ const App = () => {
   const [formValues, setFormValues] = useState(initialFormValues);
 
 
+/// EVENT HANDLERS
+
+  const inputChange = (name, value) => {
+
+    // **** ADD VALIDATION HERE***
+
+    setFormValues({
+      ...formValues,
+      [name]: value
+    })
+  }
+
   return (
     <div className="App">
       <nav className="nav-links">
@@ -38,7 +50,10 @@ const App = () => {
           <Home />
         </Route>
         <Route path="/pizza">
-          <Form />
+          <Form 
+            values={formValues}
+            change={inputChange}
+          />
         </Route>
         <Route path="/confirmation">
           <Confirmation />
