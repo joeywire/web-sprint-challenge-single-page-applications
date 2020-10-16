@@ -48,6 +48,7 @@ const Form = (props) => {
                 <div className="form checkboxes">
                     <label> Pepperoni
                         <input 
+                            id="pepperoniBox"
                             type="checkbox"
                             name="pepperoni"
                             checked={values.pepperoni}
