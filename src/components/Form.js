@@ -1,8 +1,9 @@
 import React from "react";
+import { Link } from 'react-router-dom';
 
 const Form = (props) => {
 
-    const {values, change, submit} = props;
+    const {values, change, submit, errors} = props;
 
     const onSumbit = (evt) => {
         evt.preventDefault();
@@ -16,6 +17,10 @@ const Form = (props) => {
     }
 
     return (
+        <>
+        <div className="errors">
+            <p>{errors.name}</p>
+        </div>
         <form className="form container" onSubmit={onSumbit}>
             <h2>Build Your Pizza</h2>
             <div className="form inputs">
@@ -85,8 +90,11 @@ const Form = (props) => {
                     />
                 </label>
             </div>
-            <button>Place Your Order</button>
+            <Link to="/confirmation">
+                <button>Place Your Order</button>
+            </Link>
         </form>
+        </>
     );
 
 };

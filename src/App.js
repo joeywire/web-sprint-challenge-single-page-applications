@@ -3,8 +3,10 @@ import './App.css'
 import Home from "./components/Home"; 
 import Form from "./components/Form";
 import Confirmation from "./components/Confimation";
-import {Route, Link, Switch} from 'react-router-dom'
-import axios from 'axios'
+import {Route, Link, Switch} from 'react-router-dom';
+import axios from 'axios';
+import * as yup from 'yup';
+import schema from './validation/formSchema';
 
 //Set initial Values for State
 const initialFormValues = {
@@ -21,11 +23,16 @@ const initialFormValues = {
 
 const initialOrders = [];
 
+const initialFormErrors = {
+  name: "",
+};
+
 const App = () => {
 
 ///States///
   const [orders, setOrders] = useState(initialOrders);
   const [formValues, setFormValues] = useState(initialFormValues);
+  const [formErrors, setFormErrors] = useState(initialFormErrors);
 
 ///HELPERS
 
@@ -44,7 +51,21 @@ const postOrder = (order) => {
 
   const inputChange = (name, value) => {
 
-    // **** ADD VALIDATION HERE***
+    yup
+      .reach(schema, name)
+      .validate(value)
+      .then(() => {
+        setFormErrors({
+          ...formErrors, 
+          [name]: ""
+        });
+      })
+      .catch((err) => {
+        setFormErrors({
+          ...formErrors, 
+          [name]: err.errors[0],
+        });
+      });
 
     setFormValues({
       ...formValues,
@@ -80,10 +101,11 @@ const postOrder = (order) => {
             values={formValues}
             change={inputChange}
             submit={orderSubmit}
+            errors={formErrors}
           />
         </Route>
         <Route path="/confirmation">
-          <Confirmation />
+          <Confirmation orders={orders}/>
         </Route>
       </Switch>
     </div>
