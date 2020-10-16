@@ -4,6 +4,7 @@ import Home from "./components/Home";
 import Form from "./components/Form";
 import Confirmation from "./components/Confimation";
 import {Route, Link, Switch} from 'react-router-dom'
+import axios from 'axios'
 
 //Set initial Values for State
 const initialFormValues = {
@@ -26,6 +27,18 @@ const App = () => {
   const [orders, setOrders] = useState(initialOrders);
   const [formValues, setFormValues] = useState(initialFormValues);
 
+///HELPERS
+
+const postOrder = (order) => {
+
+  axios.post(`https://reqres.in/api/order`, order)
+    .then((res) => {
+      setOrders([res.data, ...orders]);
+      setFormValues(initialFormValues);
+    })
+    .catch((err) => console.log(err));
+
+}
 
 /// EVENT HANDLERS
 
@@ -37,6 +50,19 @@ const App = () => {
       ...formValues,
       [name]: value
     })
+  }
+
+  const orderSubmit = () => {
+    const newOrder = {
+      name: formValues.name.trim(),
+      instructions: formValues.instructions.trim(),
+      size: formValues.size,
+      toppings: ["pepperoni", "cheese", "mushroom", "peppers"].filter(
+        (topping) => formValues[topping]
+      ),
+    };
+
+    postOrder(newOrder);
   }
 
   return (
@@ -53,6 +79,7 @@ const App = () => {
           <Form 
             values={formValues}
             change={inputChange}
+            submit={orderSubmit}
           />
         </Route>
         <Route path="/confirmation">

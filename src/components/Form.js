@@ -2,7 +2,12 @@ import React from "react";
 
 const Form = (props) => {
 
-    const {values, change} = props;
+    const {values, change, submit} = props;
+
+    const onSumbit = (evt) => {
+        evt.preventDefault();
+        submit()
+    }
 
     const onChange = (evt) => {
         const {name, value, type, checked} = evt.target;
@@ -11,7 +16,7 @@ const Form = (props) => {
     }
 
     return (
-        <form className="form container">
+        <form className="form container" onSubmit={onSumbit}>
             <h2>Build Your Pizza</h2>
             <div className="form inputs">
                 
